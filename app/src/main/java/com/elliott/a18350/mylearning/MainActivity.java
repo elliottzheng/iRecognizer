@@ -3,6 +3,7 @@ package com.elliott.a18350.mylearning;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,18 +15,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_STORAGE_CODE = 1;
     TessBaseAPI mTess;
-
+    private EditText tvMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +52,66 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             myedittext.setText("access get");
-            // 已经赋予权限，直接调用拨打电话的代码
+
             //callPhone();
         } else {
             // 没有赋予权限，那就去申请权限
             myedittext.setText("access get");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_STORAGE_CODE);
         }
-        View detectButton = findViewById(R.id.button2);
+        View detectButton = findViewById(R.id.choose);
         detectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onChooseClicked();
             }
         });
+
+        tvMsg = (EditText) findViewById(R.id.editText);
+        Button button3 = (Button) findViewById(R.id.phone);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+tvMsg.getText()));
+                startActivity(intent);
+            }
+        });//打电话
+
+        Button  button1= (Button) findViewById(R.id.message);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("smsto:"+tvMsg.getText()));
+                intent.putExtra("sms_body","");
+                startActivity(intent);
+            }
+        });//发短信
+
+        Button button2 = (Button) findViewById(R.id.copy);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) findViewById(R.id.copy);
+                // 从API11开始android推荐使用android.content.ClipboardManager
+                // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setText(tvMsg.getText());
+                Toast toast=Toast.makeText(getApplicationContext(), "号码已复制成功", Toast.LENGTH_LONG);
+                toast.show();
+
+            }
+        });//
+
+
+
+
+
+
     }
 
     private void initTessBaseData() {
@@ -69,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         mTess = new TessBaseAPI();
         mTess.setDebug(true);
         // 使用默认语言初始化BaseApi
-
 
         // String language = "num";
 
@@ -103,27 +152,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-    public void onClick(View v) {
-
-
-
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.textimage);
-
-        mTess.setImage(bitmap);
-
-        String result = mTess.getUTF8Text();
-
-        EditText myedittext=(EditText)this.findViewById(R.id.editText);
-
-        myedittext.setText(result);
-
-        ImageView imgView = (ImageView)this.findViewById(R.id.imageView);
-
-        imgView.setImageBitmap(bitmap);
-
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
