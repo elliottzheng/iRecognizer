@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // String language = "num";
 
-        String language = "eng";
+        String language = "write";
 
         File dir = new File(datapath + "tessdata/");
 
