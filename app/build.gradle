@@ -27,6 +27,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.yalantis:ucrop:2.2.1'
+    compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     testCompile 'junit:junit:4.12'
     compile project(':tess-two')
 }

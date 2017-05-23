@@ -4,18 +4,19 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,41 +34,52 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
+import static android.widget.Toast.makeText;
+
+@RuntimePermissions
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int REQUEST_STORAGE_CODE = 1;
+    private static final int REQUEST_CAMERA = 2;
+    private static final int REQUEST_PICK = 3;
+
     TessBaseAPI mTess;
     private EditText tvMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initTessBaseData();
+
+        MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
         setContentView(R.layout.activity_main);
-        String datapath = Environment.getExternalStorageDirectory() + "/tesseract/";
-        EditText myedittext=(EditText)this.findViewById(R.id.editText);
-        myedittext.setText(datapath);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            myedittext.setText("access get");
 
-            //callPhone();
-        } else {
-            // 没有赋予权限，那就去申请权限
-            myedittext.setText("access get");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_STORAGE_CODE);
-        }
-        View detectButton = findViewById(R.id.choose);
-        detectButton.setOnClickListener(new View.OnClickListener() {
+        Button btn_start_crop = (Button) findViewById(R.id.choose);
+        btn_start_crop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onChooseClicked();
+                //点击弹出对话框，选择拍照或者系统相册
+                new AlertDialog.Builder(MainActivity.this).setTitle("选择并裁剪图片")//设置对话框标题
+                        .setPositiveButton("从相机中", new DialogInterface.OnClickListener() {//添加确定按钮
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //调用系统相机的意图
+                                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
+                            }
+                        }).setNegativeButton("系统相册", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //调用系统图库的意图
+                        MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+                    }
+                }).show();//在按键响应事件中显示此对话框
             }
         });
+
 
         tvMsg = (EditText) findViewById(R.id.editText);
         Button button3 = (Button) findViewById(R.id.phone);
@@ -95,26 +109,47 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button button = (Button) findViewById(R.id.copy);
+
                 // 从API11开始android推荐使用android.content.ClipboardManager
                 // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setText(tvMsg.getText());
-                Toast toast=Toast.makeText(getApplicationContext(), "号码已复制成功", Toast.LENGTH_LONG);
+                Toast toast= makeText(getApplicationContext(), "号码已复制成功", Toast.LENGTH_LONG);
                 toast.show();
 
             }
-        });//
-
-
-
+        });//复制到剪贴板
 
 
 
     }
 
-    private void initTessBaseData() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void Album_click()
+    {
+        Intent choosePicIntent = new Intent(Intent.ACTION_PICK, null);
+        choosePicIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(choosePicIntent, REQUEST_PICK);
+    }
+
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    public void Camera_click() {
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePhotoIntent, REQUEST_CAMERA);
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    public void initTessBaseData() {
 
         mTess = new TessBaseAPI();
         mTess.setDebug(true);
@@ -152,26 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_STORAGE_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 权限请求成功
-                    //callPhone();
-                    EditText myedittext=(EditText)this.findViewById(R.id.editText);
-                    myedittext.setText("access get");
-                } else {
-                    // 用户拒绝了
-                    showTipDialog();
-                }
-                break;
 
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 
     private void showTipDialog() {
         new AlertDialog.Builder(this)
@@ -201,33 +217,95 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            Log.e("uri", uri.toString());
-            ContentResolver cr = this.getContentResolver();
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                if(bitmap==null)
-                    Log.i(TAG, "bitmap又是空的");
-                ImageView imageview = (ImageView) findViewById(R.id.imageView);
-                if(imageview==null)
-                    Log.i(TAG, "又是空的");
-                /* 将Bitmap设定到ImageView */
-                imageview.setImageBitmap(bitmap);
-                //将结果输出到textedit
-                EditText myedittext=(EditText)this.findViewById(R.id.editText);
-                myedittext.setText(getNumber(bitmap));
-
-            }
-            catch (FileNotFoundException e) {
-                Log.e("Exception", e.getMessage(),e);
-            }
+        switch (requestCode){
+            case REQUEST_CAMERA:
+                //调用相机了，要调用图片裁剪的方法
+            case REQUEST_PICK :
+                try {
+                    if(data != null){
+                        Uri uri = data.getData();
+                        if(!TextUtils.isEmpty(uri.getAuthority())){
+                            Cursor cursor = this.getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
+                            if(null == cursor){
+                                return;
+                            }
+                            cursor.moveToFirst();
+                            //拿到了照片的path
+                            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                            cursor.close();
+                            path = "file://"+path;
+                            //启动裁剪界面，配置裁剪参数
+                            Uri image_uri=startUcrop(path);
+                            Toast toast=Toast.makeText(getApplicationContext(), "明明就有运行crop", Toast.LENGTH_LONG);
+                            toast.show();
+                            recognize(image_uri);
+                        }
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+            case UCrop.REQUEST_CROP:
+                Uri croppedFileUri = UCrop.getOutput(data);
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    private Uri startUcrop(String path) {
+        Uri uri_crop = Uri.parse(path);
+        //裁剪后保存到文件中
+        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "SampleCropImage.jpg"));
+        UCrop uCrop = UCrop.of(uri_crop, destinationUri);
+
+        UCrop.Options options = new UCrop.Options();
+        //设置裁剪图片可操作的手势
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
+        //设置隐藏底部容器，默认显示
+//        options.setHideBottomControls(true);
+        //设置toolbar颜色
+        options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
+        //设置状态栏颜色
+        options.setStatusBarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
+        //是否能调整裁剪框
+//        options.setFreeStyleCropEnabled(true);
+        uCrop.withOptions(options);
+        uCrop.start(this);
+        return destinationUri;
+    }
+
+
+
+
+    private void recognize(Uri uri){
+        try {
+            Log.e("uri", uri.toString());
+            ContentResolver cr = this.getContentResolver();
+            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+            if(bitmap==null)
+                Log.i(TAG, "bitmap又是空的");
+            ImageView imageview = (ImageView) findViewById(R.id.imageView);
+            if(imageview==null)
+                Log.i(TAG, "又是空的");
+                /* 将Bitmap设定到ImageView */
+            imageview.setImageBitmap(bitmap);
+            //将结果输出到textedit
+            EditText myedittext=(EditText)this.findViewById(R.id.editText);
+            myedittext.setText(getNumber(bitmap));
+        }
+        catch (FileNotFoundException e) {
+            Log.e("Exception", e.getMessage(),e);
+        }
+
+    }
 }
+
+
+
 
 
 
