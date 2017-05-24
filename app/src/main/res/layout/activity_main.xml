@@ -13,65 +13,94 @@
         android:layout_width="match_parent"
         android:layout_height="96dp"
         tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="130dp"/>
+        tools:layout_editor_absoluteY="130dp" />
 
-    <EditText
+    <com.elliott.a18350.mylearning.ClearEditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="61dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
         tools:layout_editor_absoluteX="32dp"
         tools:layout_editor_absoluteY="386dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1"
         tools:context="com.elliott.a18350.mylearning.MainActivity">
 
         <Button
             android:id="@+id/copy"
-            android:layout_width="184dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拷贝到剪贴板"
+            android:background="@drawable/copy"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            android:layout_marginLeft="50dip"/>
 
         <Button
             android:id="@+id/choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/album"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dip"
+            />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      copy        "
+            android:textSize="36sp" />
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="选择图片"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
-
+            android:text="    Album"
+            android:textSize="36sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="1"
+
         tools:context="com.elliott.a18350.mylearning.MainActivity">
 
         <Button
             android:id="@+id/phone"
-            android:layout_width="181dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="打电话"
+            android:layout_marginLeft="50dip"
+            android:background="@drawable/phone"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="16dp" />
 
         <Button
             android:id="@+id/message"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发短信"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dip"
+            android:background="@drawable/message"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            />
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

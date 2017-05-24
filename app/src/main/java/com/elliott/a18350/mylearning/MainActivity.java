@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
-        setContentView(R.layout.activity_main);
-        FileName=getCacheDir()+"SampleCropImage.jpg";
 
+        setContentView(R.layout.activity_main);
+        MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
+        FileName=getCacheDir()+"SampleCropImage.jpg";
 
         MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 

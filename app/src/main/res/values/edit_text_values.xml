@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--自定义文本输入-->
+    <declare-styleable name="input_text">
+        <!--输入的类型-->
+        <attr name="input_mode">
+            <!--不做限制-->
+            <enum name="none" value="0"/>
+            <!--整数-->
+            <enum name="integer" value="1"/>
+            <!--输入Ascii-->
+            <enum name="ascii" value="2"/>
+            <!--常用字符集-->
+            <enum name="bmp0" value="3"/>
+        </attr>
+        <!--是否允许输入null类型的字符串(\n \t \f \t)-->
+        <attr name="input_empty" format="boolean"/>
+        <!--最大允许输入的文字个数，注意，非ascii 算两个字符-->
+        <attr name="max_length" format="integer"/>
+        <!--自动清空图片, 如果给定，则表示需要自定清空的配置-->
+        <attr name="auto_clear_img" format="reference"/>
+    </declare-styleable>
+</resources>
