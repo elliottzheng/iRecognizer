@@ -10,11 +10,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
@@ -27,7 +28,6 @@ import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
-
+    private Uri imageUri;
+    String FileName ;
     TessBaseAPI mTess;
     private EditText tvMsg;
 
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
         setContentView(R.layout.activity_main);
+        FileName=getCacheDir()+"SampleCropImage.jpg";
+
 
         MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
@@ -120,8 +123,15 @@ public class MainActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.CAMERA)
     public void Camera_click() {
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePhotoIntent, REQUEST_CAMERA);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            imageUri= FileProvider.getUriForFile(this,BuildConfig.APPLICATION_ID+".fileProvider", new File(getCacheDir(),"image.jpg"));
+        } else {
+            imageUri = Uri.fromFile(new File(getCacheDir(),"image.jpg"));
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, REQUEST_CAMERA);
     }
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -197,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //点击弹出对话框，选择拍照或者系统相册
-                new AlertDialog.Builder(MainActivity.this).setTitle("上传头像")//设置对话框标题
+                new AlertDialog.Builder(MainActivity.this).setTitle("选择图片")//设置对话框标题
                         .setPositiveButton("拍照", new DialogInterface.OnClickListener() {//添加确定按钮
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -221,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case REQUEST_CAMERA:
                 try{
-                    String path=startCropImage(data);
+                    String path=startCropImage();
                     path = "file://"+path;
                     startUcrop(path);
                 }catch (Exception e){
@@ -262,22 +272,22 @@ public class MainActivity extends AppCompatActivity {
         Log.d("HH", "startUcrop: "+path);
         Uri uri_crop = Uri.parse(path);
         //裁剪后保存到文件中
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "SampleCropImage.jpg"));
-        UCrop uCrop = UCrop.of(uri_crop, destinationUri).withAspectRatio(4,1);
+        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "SampleCropImage.png"));
+        UCrop uCrop = UCrop.of(uri_crop, destinationUri);
         UCrop.Options options = new UCrop.Options();
         //设置标题
         options.setToolbarTitle("请将号码放在扫描框中，尽量减少干扰");
         //设置裁剪图片可操作的手势
-        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
+        //options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
         //设置隐藏底部容器，默认显示
         options.setHideBottomControls(true);
-
         //设置toolbar颜色
         options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         //设置状态栏颜色
         options.setStatusBarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         //是否能调整裁剪框
         options.setFreeStyleCropEnabled(true);
+        uCrop.useSourceImageAspectRatio();
         uCrop.withOptions(options);
         try {
             uCrop.start(this);
@@ -292,35 +302,12 @@ public class MainActivity extends AppCompatActivity {
      * @param
      */
 
-    private String startCropImage(Intent data) {
-        if (!Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            Log.i("save", "sd card is not avaiable/writeable right now.");
-        }
+    private String startCropImage() {
         //显示图片
-        Bitmap bmp = (Bitmap) data.getExtras().get("data");// 解析返回的图片成bitmap
+        Bitmap bmp = BitmapFactory.decodeFile(FileName);// 解析返回的图片成bitmap
         ImageView imageView=(ImageView)findViewById(R.id.imageView);
         imageView.setImageBitmap(bmp);
-        // 保存文件 为图片命名啊
-        FileOutputStream fos = null;
-        String fileName = getCacheDir()+"SampleCropImage.jpg";// 保存路径
-        Log.d("start crop", fileName);
-        try {// 写入SD card
-            fos = new FileOutputStream(fileName);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }// 显示图片
-
-        return fileName;
+        return FileName;
     }
 
 
