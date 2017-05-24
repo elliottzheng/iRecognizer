@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         //设置状态栏颜色
         options.setStatusBarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         //是否能调整裁剪框
-//        options.setFreeStyleCropEnabled(true);
+        options.setFreeStyleCropEnabled(true);
         uCrop.withOptions(options);
         try {
             uCrop.start(this);
