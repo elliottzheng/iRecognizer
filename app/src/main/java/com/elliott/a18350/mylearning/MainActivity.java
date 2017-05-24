@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -43,9 +44,9 @@ import static android.widget.Toast.makeText;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final int REQUEST_STORAGE_CODE = 1;
-    private static final int REQUEST_CAMERA = 2;
-    private static final int REQUEST_PICK = 3;
+
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_PICK = 2;
 
     TessBaseAPI mTess;
     private EditText tvMsg;
@@ -53,33 +54,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
         setContentView(R.layout.activity_main);
 
-
-        Button btn_start_crop = (Button) findViewById(R.id.choose);
-        btn_start_crop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击弹出对话框，选择拍照或者系统相册
-                new AlertDialog.Builder(MainActivity.this).setTitle("选择并裁剪图片")//设置对话框标题
-                        .setPositiveButton("从相机中", new DialogInterface.OnClickListener() {//添加确定按钮
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //调用系统相机的意图
-                                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
-                            }
-                        }).setNegativeButton("系统相册", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //调用系统图库的意图
-                        MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
-                    }
-                }).show();//在按键响应事件中显示此对话框
-            }
-        });
-
+        MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
         tvMsg = (EditText) findViewById(R.id.editText);
         Button button3 = (Button) findViewById(R.id.phone);
@@ -120,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });//复制到剪贴板
-
-
 
     }
 
@@ -187,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
     private void showTipDialog() {
         new AlertDialog.Builder(this)
                 .setMessage("该程序需要读取外部存储权限，否则无法正常运行")
@@ -216,13 +190,45 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void init_Croper() {
+        Button btn_start_crop = (Button)findViewById(R.id.choose);
+        btn_start_crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击弹出对话框，选择拍照或者系统相册
+                new AlertDialog.Builder(MainActivity.this).setTitle("上传头像")//设置对话框标题
+                        .setPositiveButton("拍照", new DialogInterface.OnClickListener() {//添加确定按钮
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //调用系统相机的意图
+                                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
+                            }
+                        }).setNegativeButton("系统相册", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //调用系统图库的意图
+                        MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+                    }
+                }).show();//在按键响应事件中显示此对话框
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case REQUEST_CAMERA:
+                try{
+                    String path=startCropImage(data);
+                    path = "file://"+path;
+                    startUcrop(path);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 //调用相机了，要调用图片裁剪的方法
+                break;
             case REQUEST_PICK :
                 try {
                     if(data != null){
@@ -237,11 +243,8 @@ public class MainActivity extends AppCompatActivity {
                             String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                             cursor.close();
                             path = "file://"+path;
+                            startUcrop(path);
                             //启动裁剪界面，配置裁剪参数
-                            Uri image_uri=startUcrop(path);
-                            Toast toast=Toast.makeText(getApplicationContext(), "明明就有运行crop", Toast.LENGTH_LONG);
-                            toast.show();
-                            recognize(image_uri);
                         }
                     }
                 } catch (Exception e){
@@ -250,23 +253,25 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case UCrop.REQUEST_CROP:
                 Uri croppedFileUri = UCrop.getOutput(data);
+                recognize(croppedFileUri);
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    private Uri startUcrop(String path) {
+    private void startUcrop(String path) {
+        Log.d("HH", "startUcrop: "+path);
         Uri uri_crop = Uri.parse(path);
         //裁剪后保存到文件中
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "SampleCropImage.jpg"));
-        UCrop uCrop = UCrop.of(uri_crop, destinationUri);
-
+        UCrop uCrop = UCrop.of(uri_crop, destinationUri).withAspectRatio(4,1);
         UCrop.Options options = new UCrop.Options();
+        //设置标题
+        options.setToolbarTitle("请将号码放在扫描框中，尽量减少干扰");
         //设置裁剪图片可操作的手势
         options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
         //设置隐藏底部容器，默认显示
-//        options.setHideBottomControls(true);
+        options.setHideBottomControls(true);
+
         //设置toolbar颜色
         options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         //设置状态栏颜色
@@ -274,10 +279,49 @@ public class MainActivity extends AppCompatActivity {
         //是否能调整裁剪框
 //        options.setFreeStyleCropEnabled(true);
         uCrop.withOptions(options);
-        uCrop.start(this);
-        return destinationUri;
+        try {
+            uCrop.start(this);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
+    /**e
+     * 调用相机后对图片进行裁剪的方法
+     * @param
+     */
+
+    private String startCropImage(Intent data) {
+        if (!Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            Log.i("save", "sd card is not avaiable/writeable right now.");
+        }
+        //显示图片
+        Bitmap bmp = (Bitmap) data.getExtras().get("data");// 解析返回的图片成bitmap
+        ImageView imageView=(ImageView)findViewById(R.id.imageView);
+        imageView.setImageBitmap(bmp);
+        // 保存文件 为图片命名啊
+        FileOutputStream fos = null;
+        String fileName = getCacheDir()+"SampleCropImage.jpg";// 保存路径
+        Log.d("start crop", fileName);
+        try {// 写入SD card
+            fos = new FileOutputStream(fileName);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }// 显示图片
+
+        return fileName;
+    }
 
 
 
