@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">iRecognizer</string>
+    <string name="about">iRecognizer</string>
+    <string name="describe">这是一款可以帮助你快速获得印刷体数字的软件</string>
+    <string name="codecloud">码云地址：https://git.oschina.net/hy2_5021/android_client</string>
+    <string name="introduce">iRecognizer是厦门大学软件学院本科16级7位学生的软件竞赛课程作品</string>
+    <string name="email">有任何建议欢迎到码云上与我们交流</string>
 </resources>

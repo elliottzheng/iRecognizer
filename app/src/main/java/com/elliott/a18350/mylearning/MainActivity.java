@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -101,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });//复制到剪贴板
+
+        Button  button4= (Button) findViewById(R.id.info);
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, InfoActivity.class));
+            }
+        });//帮助
 
     }
 
@@ -202,27 +209,22 @@ public class MainActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void init_Croper() {
-        Button btn_start_crop = (Button)findViewById(R.id.choose);
-        btn_start_crop.setOnClickListener(new View.OnClickListener() {
+        Button  button1= (Button) findViewById(R.id.album);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //点击弹出对话框，选择拍照或者系统相册
-                new AlertDialog.Builder(MainActivity.this).setTitle("选择图片")//设置对话框标题
-                        .setPositiveButton("拍照", new DialogInterface.OnClickListener() {//添加确定按钮
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //调用系统相机的意图
-                                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
-                            }
-                        }).setNegativeButton("系统相册", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //调用系统图库的意图
-                        MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
-                    }
-                }).show();//在按键响应事件中显示此对话框
+                MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
             }
-        });
+        });//相册选取
+
+
+        Button  button2= (Button) findViewById(R.id.camera);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
+            }
+        });//拍照获得
     }
 
     @Override
