@@ -4,7 +4,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.elliott.a18350.mylearning"
+        applicationId "com.elliott.a18350.irecognizer"
         minSdkVersion 18
         targetSdkVersion 24
         versionCode 1

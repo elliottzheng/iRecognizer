@@ -1,4 +1,4 @@
-package com.elliott.a18350.mylearning;
+package com.elliott.a18350.irecognizer;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
+        com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
         //FileName=getCacheDir()+"image.jpg";
 
-        MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
+        com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
         tvMsg = (EditText) findViewById(R.id.editText);
         Button button3 = (Button) findViewById(R.id.phone);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // NOTE: delegate the permission handling to generated method
-        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            imageUri= FileProvider.getUriForFile(this,"com.elliott.a18350.mylearning.fileprovider", new File(getCacheDir(),"image.jpg"));
+            imageUri= FileProvider.getUriForFile(this,"com.elliott.a18350.irecognizer.fileprovider", new File(getCacheDir(),"image.jpg"));
         } else {
             imageUri = Uri.fromFile(new File(getCacheDir(),"image.jpg"));
         }
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+                com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
             }
         });//相册选取
 
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
+                com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
             }
         });//拍照获得
     }

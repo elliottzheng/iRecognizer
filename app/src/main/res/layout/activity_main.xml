@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elliott.a18350.mylearning.MainActivity"
+    tools:context="com.elliott.a18350.irecognizer.MainActivity"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteX="7dp"
         tools:layout_editor_absoluteY="130dp" />
 
-    <com.elliott.a18350.mylearning.ClearEditText
+    <com.elliott.a18350.irecognizer.ClearEditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="61dp"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1"
-        tools:context="com.elliott.a18350.mylearning.MainActivity">
+        tools:context="com.elliott.a18350.irecognizer.MainActivity">
 
         <Button
             android:id="@+id/album"
@@ -59,7 +59,7 @@
         android:orientation="horizontal"
         android:weightSum="1"
 
-        tools:context="com.elliott.a18350.mylearning.MainActivity">
+        tools:context="com.elliott.a18350.irecognizer.MainActivity">
 
         <Button
             android:id="@+id/phone"
@@ -92,7 +92,7 @@
             android:layout_alignParentEnd="true"
             android:orientation="horizontal"
             android:weightSum="1"
-            tools:context="com.elliott.a18350.mylearning.MainActivity"
+            tools:context="com.elliott.a18350.irecognizer.MainActivity"
             android:id="@+id/relativeLayout">
 
             <Button

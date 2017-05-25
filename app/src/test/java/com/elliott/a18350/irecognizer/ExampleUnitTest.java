@@ -1,4 +1,4 @@
-package com.elliott.a18350.mylearning;
+package com.elliott.a18350.irecognizer;
 
 import org.junit.Test;
 

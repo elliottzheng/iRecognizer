@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.elliott.a18350.mylearning">
+    package="com.elliott.a18350.irecognizer">
 
     <application
         android:allowBackup="true"
@@ -8,10 +8,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".InfoActivity"
+        <activity android:name="com.elliott.a18350.irecognizer.MainActivity"/>
+        <activity android:name="com.elliott.a18350.irecognizer.InfoActivity"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".LaunchActivity"
+        <activity android:name="com.elliott.a18350.irecognizer.LaunchActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.elliott.a18350.mylearning.fileprovider"
+            android:authorities="com.elliott.a18350.irecognizer.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
