@@ -24,7 +24,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.elliott.a18350.mylearning.fileProvider"
+            android:authorities="com.elliott.a18350.mylearning.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

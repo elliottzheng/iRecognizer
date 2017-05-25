@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
     private Uri imageUri;
-    String FileName ;
+    //String FileName ;
     TessBaseAPI mTess;
     private EditText tvMsg;
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
-        FileName=getCacheDir()+"SampleCropImage.jpg";
+        //FileName=getCacheDir()+"image.jpg";
 
         MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
@@ -133,10 +133,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            imageUri= FileProvider.getUriForFile(this,BuildConfig.APPLICATION_ID+".fileProvider", new File(getCacheDir(),"image.jpg"));
+            imageUri= FileProvider.getUriForFile(this,"com.elliott.a18350.mylearning.fileprovider", new File(getCacheDir(),"image.jpg"));
         } else {
             imageUri = Uri.fromFile(new File(getCacheDir(),"image.jpg"));
         }
+        Log.d("sdad", "Camera_click: should be some thing");
+        Log.d("uri", "Camera_click: "+imageUri.toString());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
@@ -233,9 +235,8 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case REQUEST_CAMERA:
                 try{
-                    String path=startCropImage();
-                    path = "file://"+path;
-                    startUcrop(path);
+                    Uri camera_uri=startCropImage();
+                    startUcrop(camera_uri);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -255,7 +256,8 @@ public class MainActivity extends AppCompatActivity {
                             String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                             cursor.close();
                             path = "file://"+path;
-                            startUcrop(path);
+                            Uri uri_crop = Uri.parse(path);
+                            startUcrop(uri_crop);
                             //启动裁剪界面，配置裁剪参数
                         }
                     }
@@ -270,9 +272,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startUcrop(String path) {
-        Log.d("HH", "startUcrop: "+path);
-        Uri uri_crop = Uri.parse(path);
+    private void startUcrop(Uri uri_crop) {
         //裁剪后保存到文件中
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "SampleCropImage.png"));
         UCrop uCrop = UCrop.of(uri_crop, destinationUri);
@@ -304,12 +304,12 @@ public class MainActivity extends AppCompatActivity {
      * @param
      */
 
-    private String startCropImage() {
+    private Uri startCropImage() {
         //显示图片
-        Bitmap bmp = BitmapFactory.decodeFile(FileName);// 解析返回的图片成bitmap
+        Bitmap bmp = BitmapFactory.decodeFile(imageUri.toString());// 解析返回的图片成bitmap
         ImageView imageView=(ImageView)findViewById(R.id.imageView);
         imageView.setImageBitmap(bmp);
-        return FileName;
+        return imageUri;
     }
 
 
