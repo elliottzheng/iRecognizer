@@ -1,7 +1,6 @@
 package com.elliott.a18350.irecognizer;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +39,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 import static android.widget.Toast.makeText;
 /**
- * Using Ucrop in my project --Elliott
+ * Using Ucrop in my project --Elliott 20175.28
  * Copyright 2017, Yalantis
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +130,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK&&event.getRepeatCount() == 0)//第一次按的时候提示就好了
+       {
+
+            Toast toast= makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_LONG);
+            toast.show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -199,26 +212,6 @@ public class MainActivity extends AppCompatActivity {
         mTess.init(path, language);
     }
 
-
-
-    private void showTipDialog() {
-        new AlertDialog.Builder(this)
-                .setMessage("该程序需要读取外部存储权限，否则无法正常运行")
-                .setPositiveButton(android.R.string.ok, null)
-                .create()
-                .show();
-    }
-
-    public void onChooseClicked() {
-        Intent intent = new Intent();
-                /* 开启Pictures画面Type设定为image */
-        intent.setType("image/*");
-                /* 使用Intent.ACTION_GET_CONTENT这个Action */
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-                /* 取得相片后返回本画面 */
-        startActivityForResult(intent, 1);
-        Log.d(TAG, "onChooseClicked: ");
-    }
 
     protected String getNumber(Bitmap bitmap)
     {
