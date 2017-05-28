@@ -56,8 +56,6 @@ import static android.widget.Toast.makeText;
  */
 
 
-
-
 @RuntimePermissions
 public class MainActivity extends AppCompatActivity {
 
@@ -254,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        switch(resultCode) {
+            case RESULT_CANCELED:
+                return;
+        }
         switch (requestCode){
             case REQUEST_CAMERA:
                 try{
@@ -292,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 recognize(croppedFileUri);
                 break;
         }
+
     }
 
     private void startUcrop(Uri uri_crop) {
@@ -300,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         UCrop uCrop = UCrop.of(uri_crop, destinationUri);
         UCrop.Options options = new UCrop.Options();
         //设置标题
-        options.setToolbarTitle("请将号码放在扫描框中，尽量减少干扰");
+        options.setToolbarTitle("请将号码放在扫描框中，减少干扰");
         //设置裁剪图片可操作的手势
         //options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
         //设置隐藏底部容器，默认显示

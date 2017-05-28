@@ -13,12 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="96dp"
         tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="130dp" />
+        tools:layout_editor_absoluteY="130dp"
+        android:background="@drawable/bg_boder"/>
 
     <com.elliott.a18350.irecognizer.ClearEditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="61dp"
+        android:background="@drawable/edit_bg"
         android:ems="10"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="32dp"
