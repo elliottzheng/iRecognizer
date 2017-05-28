@@ -62,7 +62,7 @@ import static android.widget.Toast.makeText;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
+    private long exitTime;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
     private Uri imageUri;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //FileName=getCacheDir()+"image.jpg";
 
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
-
+        exitTime=System.currentTimeMillis();
         tvMsg = (EditText) findViewById(R.id.editText);
         Button button3 = (Button) findViewById(R.id.phone);
         button3.setOnClickListener(new View.OnClickListener() {
@@ -130,13 +130,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
+        {
 
-        if (keyCode == KeyEvent.KEYCODE_BACK&&event.getRepeatCount() == 0)//第一次按的时候提示就好了
-       {
+            if((System.currentTimeMillis()-exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
+            {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序",Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            }
+            else
+            {
+                finish();
+                System.exit(0);
+            }
 
-            Toast toast= makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_LONG);
-            toast.show();
             return true;
         }
         return super.onKeyDown(keyCode, event);
