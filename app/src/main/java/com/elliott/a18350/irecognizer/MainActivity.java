@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,7 +57,7 @@ import static android.widget.Toast.makeText;
 
 
 @RuntimePermissions
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseColorActivity {
 
     private static final String TAG = "MainActivity";
     private long exitTime;
@@ -72,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
         //FileName=getCacheDir()+"image.jpg";
 
@@ -127,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });//帮助
 
+    }
+
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_main;
     }
 
     @Override

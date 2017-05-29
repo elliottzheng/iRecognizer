@@ -8,11 +8,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.elliott.a18350.irecognizer.MainActivity"/>
+        <activity android:name="com.elliott.a18350.irecognizer.MainActivity"
+            android:theme="@style/TranslucentTheme"/>
         <activity android:name="com.elliott.a18350.irecognizer.InfoActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/TranslucentTheme"/>
         <activity android:name="com.elliott.a18350.irecognizer.LaunchActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/TransSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

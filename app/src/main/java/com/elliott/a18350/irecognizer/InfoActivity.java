@@ -16,6 +16,7 @@ public class InfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.about);
         TextView textView = (TextView) findViewById(R.id.hyperlink);
         textView.setAutoLinkMask(Linkify.ALL);
