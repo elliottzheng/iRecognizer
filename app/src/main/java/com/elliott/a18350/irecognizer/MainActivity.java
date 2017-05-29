@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -305,9 +306,9 @@ public class MainActivity extends AppCompatActivity {
         //设置标题
         options.setToolbarTitle("请将号码放在扫描框中，减少干扰");
         //设置裁剪图片可操作的手势
-        //options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
-        //设置隐藏底部容器，默认显示
-        options.setHideBottomControls(true);
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
+        //设置隐藏底部容器，默认显示,设置为false就会显示了
+        options.setHideBottomControls(false);
         //设置toolbar颜色
         options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         //设置状态栏颜色
