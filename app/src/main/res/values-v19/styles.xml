@@ -6,7 +6,7 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
-    <style name="TransSplashTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="TransSplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowBackground">@drawable/darw</item>
