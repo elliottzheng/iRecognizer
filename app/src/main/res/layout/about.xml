@@ -19,6 +19,13 @@
         android:textSize="30sp" />
 
     <TextView
+        android:id="@+id/hyperlink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gayhub"
+        android:textSize="19sp" />
+
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

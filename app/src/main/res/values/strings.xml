@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">iRecognizer</string>
     <string name="describe">这是一款可以帮助你快速获得印刷体数字的软件</string>
-    <string name="codecloud">码云地址：https://git.oschina.net/ylzheng/myrecoginzer</string>
+    <string name="codecloud">gayhub地址:</string>
+    <string name="gayhub">https://github.com/agentzheng/iRecognizer</string>
     <string name="introduce">iRecognizer是一款实用工具，本应用能快速扫描印刷体数字，当手机里存了图片形式的电话号码之类的，可以用本应用把它们变成数字。</string>
     <string name="email">本应用酷安首发，有bug或建议欢迎到酷安评论区交流（可能存在问题，MIUI系统相机闪退，未修复）</string>
 </resources>
