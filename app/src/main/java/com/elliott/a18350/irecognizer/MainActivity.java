@@ -20,8 +20,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
         exitTime=System.currentTimeMillis();
         tvMsg = (EditText) findViewById(R.id.editText);
-        Button button3 = (Button) findViewById(R.id.phone);
+        ImageButton button3 = (ImageButton) findViewById(R.id.phone);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });//打电话
 
-        Button  button1= (Button) findViewById(R.id.message);
+        ImageButton  button1= (ImageButton) findViewById(R.id.message);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });//发短信
 
-        Button button2 = (Button) findViewById(R.id.copy);
+        ImageButton button2 = (ImageButton) findViewById(R.id.copy);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });//复制到剪贴板
 
-        Button  button4= (Button) findViewById(R.id.info);
+        ImageButton  button4= (ImageButton) findViewById(R.id.info);
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void init_Croper() {
-        Button  button1= (Button) findViewById(R.id.album);
+        ImageButton  button1= (ImageButton) findViewById(R.id.album);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         });//相册选取
 
 
-        Button  button2= (Button) findViewById(R.id.camera);
+        ImageButton button2= (ImageButton) findViewById(R.id.camera);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
