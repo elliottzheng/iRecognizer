@@ -30,7 +30,7 @@
         android:layout_height="61dp"
         android:background="@drawable/edit_bg"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="number"
         tools:layout_editor_absoluteX="32dp"
         tools:layout_editor_absoluteY="386dp" />
 

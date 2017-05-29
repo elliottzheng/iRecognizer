@@ -18,6 +18,7 @@ public class InfoActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.about);
+        //setContentView(R.layout.new_main);
         TextView textView = (TextView) findViewById(R.id.hyperlink);
         textView.setAutoLinkMask(Linkify.ALL);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
