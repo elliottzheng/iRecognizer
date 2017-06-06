@@ -1,8 +1,8 @@
+package com.elliott.a18350.irecognizer
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import com.elliott.a18350.irecognizer.MainActivity
 
 /**
  * Created by 18350 on 2017/5/24 0024.
