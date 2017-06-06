@@ -9,8 +9,8 @@ android {
         applicationId "com.elliott.a18350.irecognizer"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.5"
+        versionCode 4
+        versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk{
@@ -41,7 +41,7 @@ dependencies {
     compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     testCompile 'junit:junit:4.12'
-    compile project(':tess-two')
+    compile 'com.rmtheis:tess-two:6.3.0'
     compile 'com.android.support:design:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

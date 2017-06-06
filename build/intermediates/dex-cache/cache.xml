@@ -323,16 +323,6 @@
     </item>
     <item
         is-multidex="false"
-        jar="M:\iRecognizer\myrecoginzer\tess-two\build\intermediates\intermediate-jars\release\classes.jar"
-        jumboMode="false"
-        min-sdk-version="14"
-        optimize="true"
-        revision="25.0.0"
-        sha1="90b930477807fbf853e8ffd3eada100de58eb98f">
-        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\25.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\transition-25.3.1.aar\170f288eb8a225efc8cb6d98d7e2d54b\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="14"
@@ -350,16 +340,6 @@
         revision="25.0.0"
         sha1="178a142a25abea83b5bbb8c2660e6fb6c1ac7eb1">
         <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="M:\iRecognizer\myrecoginzer\tess-two\build\intermediates\intermediate-jars\release\classes.jar"
-        jumboMode="false"
-        min-sdk-version="18"
-        optimize="true"
-        revision="25.0.0"
-        sha1="90b930477807fbf853e8ffd3eada100de58eb98f">
-        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\25.jar" />
     </item>
     <item
         is-multidex="false"
@@ -430,6 +410,16 @@
         revision="25.0.0"
         sha1="2c60ae5fbd4660b2b02e52ff411e88166545fe5b">
         <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\tess-two-6.3.0.aar\5b2d6b1411c7fbc6fb827d6d86f025ed\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="14"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2e1e80e5618ce24efaf884fec3cf6133ba2d6555">
+        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\26.jar" />
     </item>
     <item
         is-multidex="false"
