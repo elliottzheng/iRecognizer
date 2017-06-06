@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <dimen name="size90">85dp</dimen>
     <!--dimen name="design_fab_size_normal" tools:ignore="PrivateResource">80dp</dimen>

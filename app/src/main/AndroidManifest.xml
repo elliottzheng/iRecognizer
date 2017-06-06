@@ -9,6 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.elliott.a18350.irecognizer.MainActivity"
+
             android:theme="@style/TranslucentTheme"/>
         <activity android:name="com.elliott.a18350.irecognizer.RecognizeActivity"
             android:theme="@android:style/Theme.NoDisplay"/>
@@ -18,6 +19,7 @@
             android:theme="@style/TransSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             </activity>>
