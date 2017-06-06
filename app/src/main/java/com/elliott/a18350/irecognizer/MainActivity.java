@@ -259,7 +259,11 @@ public class MainActivity extends BaseColorActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch(resultCode) {
             case RESULT_CANCELED:
-                return;
+                Log.d(TAG, "onActivityResult= "+requestCode );
+                if(requestCode==UCrop.REQUEST_CROP)
+                    MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+                else
+                    return;
         }
         switch (requestCode){
             case REQUEST_CAMERA:
