@@ -24,15 +24,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.googlecode.tesseract.android.TessBaseAPI;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -64,19 +60,23 @@ public class MainActivity extends BaseColorActivity {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
     private Uri imageUri;
-    //String FileName ;
-    TessBaseAPI mTess;
     private EditText tvMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.initTessBaseDataWithCheck(this);
-        //FileName=getCacheDir()+"image.jpg";
-
+        Log.d(TAG, "onCreate: before");
+        Intent formal_intent=getIntent();
+        if(formal_intent.getData()!=null)
+        {
+            Log.i(TAG, "onCreate: getin");
+            place(formal_intent.getStringExtra("num"),formal_intent.getData());
+        }
+        else
+            exitTime=System.currentTimeMillis();
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
-        exitTime=System.currentTimeMillis();
+
+
         tvMsg = (EditText) findViewById(R.id.editText);
         ImageButton button3 = (ImageButton) findViewById(R.id.phone);
         button3.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +127,27 @@ public class MainActivity extends BaseColorActivity {
 
     }
 
+    private void place(String str,Uri uri){
+        try {
+            Log.e("uri", uri.toString());
+            ContentResolver cr = this.getContentResolver();
+            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+            if(bitmap==null)
+                Log.i(TAG, "bitmap又是空的");
+            ImageView imageview = (ImageView) findViewById(R.id.imageView);
+            if(imageview==null)
+                Log.i(TAG, "又是空的");
+                /* 将Bitmap设定到ImageView */
+            imageview.setImageBitmap(bitmap);
+            //将结果输出到textedit
+            EditText myedittext=(EditText)this.findViewById(R.id.editText);
+            myedittext.setText(str);
+        }
+        catch (FileNotFoundException e) {
+            Log.e("Exception", e.getLocalizedMessage());
+        }
+
+    }
 
     @Override
     protected int getLayoutResId() {
@@ -149,7 +170,6 @@ public class MainActivity extends BaseColorActivity {
                 finish();
                 System.exit(0);
             }
-
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -188,51 +208,6 @@ public class MainActivity extends BaseColorActivity {
         startActivityForResult(intent, REQUEST_CAMERA);
     }
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    public void initTessBaseData() {
-
-        mTess = new TessBaseAPI();
-        mTess.setDebug(true);
-        // 使用默认语言初始化BaseApi
-
-        // String language = "num";
-
-        String language = "write";
-        String path = getFilesDir().getAbsolutePath();
-        File file = new File(path+"/tessdata");
-
-        if (!file.exists()) {
-            file.mkdirs();
-            try {
-                InputStream is = getClass().getClassLoader().getResourceAsStream("assets/write.traineddata");
-                File file2 = new File(file.getAbsoluteFile() + "/write.traineddata");
-                FileOutputStream out = new FileOutputStream(file2);
-                int len = 0;
-                byte[] buffer = new byte[1024];
-                while ((len = is.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
-                    out.flush();
-                }
-                is.close();
-                out.close();
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        mTess.init(path, language);
-    }
-
-
-    protected String getNumber(Bitmap bitmap)
-    {
-
-        mTess.setImage(bitmap);
-        String result = mTess.getUTF8Text();
-        return result;
-    }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void init_Croper() {
@@ -300,7 +275,9 @@ public class MainActivity extends BaseColorActivity {
                 break;
             case UCrop.REQUEST_CROP:
                 Uri croppedFileUri = UCrop.getOutput(data);
-                recognize(croppedFileUri);
+                Intent recognize_intent=new Intent(this,RecognizeActivity.class);
+                recognize_intent.setData(croppedFileUri);
+                startActivity(recognize_intent);
                 break;
         }
 
@@ -345,31 +322,11 @@ public class MainActivity extends BaseColorActivity {
         imageView.setImageBitmap(bmp);
         return imageUri;
     }
-
-
-
-    private void recognize(Uri uri){
-        try {
-            Log.e("uri", uri.toString());
-            ContentResolver cr = this.getContentResolver();
-            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-            if(bitmap==null)
-                Log.i(TAG, "bitmap又是空的");
-            ImageView imageview = (ImageView) findViewById(R.id.imageView);
-            if(imageview==null)
-                Log.i(TAG, "又是空的");
-                /* 将Bitmap设定到ImageView */
-            imageview.setImageBitmap(bitmap);
-            //将结果输出到textedit
-            EditText myedittext=(EditText)this.findViewById(R.id.editText);
-            myedittext.setText(getNumber(bitmap));
-        }
-        catch (FileNotFoundException e) {
-            Log.e("Exception", e.getMessage(),e);
-        }
-
-    }
 }
+
+
+
+
 
 
 

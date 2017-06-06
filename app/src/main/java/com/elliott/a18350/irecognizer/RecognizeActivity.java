@@ -3,14 +3,13 @@ package com.elliott.a18350.irecognizer;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -31,12 +30,15 @@ public class RecognizeActivity extends Activity {
     private TessBaseAPI mTess;
     private static final String TAG = "RecognizeActivity";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RecognizeActivityPermissionsDispatcher.initTessBaseDataWithCheck(RecognizeActivity.this);
         Uri image_uri=getIntent().getData();
         recognize(image_uri);
+
+        Log.d(TAG, "onCreate: nothirng happen");
         finish();
     }
 
@@ -82,6 +84,7 @@ public class RecognizeActivity extends Activity {
 
         mTess.setImage(bitmap);
         String result = mTess.getUTF8Text();
+        Log.d(TAG, "getNumber: "+result);
         return result;
     }
 
@@ -92,21 +95,17 @@ public class RecognizeActivity extends Activity {
         RecognizeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
-    private void recognize(Uri uri){
+    private void recognize(Uri image_uri){
         try {
-            Log.e("uri", uri.toString());
+            Log.e("uri", image_uri.toString());
             ContentResolver cr = this.getContentResolver();
-            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(image_uri));
             if(bitmap==null)
                 Log.i(TAG, "bitmap又是空的");
-            ImageView imageview = (ImageView) findViewById(R.id.imageView);
-            if(imageview==null)
-                Log.i(TAG, "又是空的");
-                /* 将Bitmap设定到ImageView */
-            imageview.setImageBitmap(bitmap);
-            //将结果输出到textedit
-            EditText myedittext=(EditText)this.findViewById(R.id.editText);
-            myedittext.setText(getNumber(bitmap));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setData(image_uri);
+            intent.putExtra("num",getNumber(bitmap));
+            startActivity(intent);
         }
         catch (FileNotFoundException e) {
             Log.e("Exception", e.getMessage(),e);
