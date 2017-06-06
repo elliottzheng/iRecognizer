@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.elliott.a18350.irecognizer"
-        minSdkVersion 18
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 3
         versionName "1.5"

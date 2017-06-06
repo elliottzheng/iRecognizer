@@ -9,7 +9,14 @@ import android.view.Window;
 
 /**
  * Created by fan on 2016/6/7.
+ * 代码来自fan的博客 Android 沉浸式状态栏的实现方法、状态栏透明
+ * http://blog.csdn.net/fan7983377/article/details/51604657
+ * 十分感谢
+ * modified by Elliott Zheng 2017/6/6
+ *
+ *
  */
+
 public abstract class BaseColorActivity extends AppCompatActivity {
 
     @Override

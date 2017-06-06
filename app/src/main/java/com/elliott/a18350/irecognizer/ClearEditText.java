@@ -9,8 +9,16 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by 18350 on 2017/5/24 0024.
+
+ /**
+  * 描述:实现带清除效果的EditText
+  * Created by vctor2015 on 2017/3/9.
+  * 代码来自csdn博友 Android界的小蚂蚁的博客
+  * http://blog.csdn.net/qq_29502523/article/details/60965020
+  * 十分感谢
+  *
+  * modified by 18350 on 2017/5/24 0024.
+  *
  */
 
 public class ClearEditText extends android.support.v7.widget.AppCompatEditText implements View.OnFocusChangeListener,

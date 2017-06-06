@@ -1,0 +1,6 @@
+COMMAND=PREDEX_LIBRARY_TO_DEX_ARCHIVE
+FILE_PATH=M:\iRecognizer\myrecoginzer\tess-two\build\intermediates\intermediate-jars\debug\classes.jar
+FILE_HASH=870a77b70248c5be8739d8bac53ac346bd4cd39d
+DX_VERSION=1.13
+JUMBO_MODE=false
+OPTIMIZE=true
