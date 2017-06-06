@@ -10,6 +10,8 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.elliott.a18350.irecognizer.MainActivity"
             android:theme="@style/TranslucentTheme"/>
+        <activity android:name="com.elliott.a18350.irecognizer.RecognizeActivity"
+            android:theme="@android:style/Theme.NoDisplay"/>
         <activity android:name="com.elliott.a18350.irecognizer.InfoActivity"
             android:theme="@style/TranslucentTheme"/>
         <activity android:name="com.elliott.a18350.irecognizer.LaunchActivity"
