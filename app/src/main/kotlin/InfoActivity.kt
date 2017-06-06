@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.KeyEvent
-import android.widget.TextView
+import kotlinx.android.synthetic.main.about.*
+
 
 /**
  * Created by 18350 on 2017/5/25 0025.
+ * to kotlin 2017/6/6
  */
 
 class InfoActivity : Activity() {
@@ -17,10 +19,8 @@ class InfoActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.about)
-        //setContentView(R.layout.new_main);
-        val textView = findViewById(R.id.hyperlink) as TextView
-        textView.autoLinkMask = Linkify.ALL
-        textView.movementMethod = LinkMovementMethod.getInstance()
+        hyperlink.autoLinkMask = Linkify.ALL
+        hyperlink.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
