@@ -9,17 +9,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.elliott.a18350.irecognizer.MainActivity"
-
-            android:theme="@style/TranslucentTheme"/>
+            android:theme="@style/TranslucentTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/png"></data>
+                <data android:mimeType="image/jpg"></data>
+                <data android:mimeType="image/bmp"></data>
+            </intent-filter>
+        </activity>>
         <activity android:name="com.elliott.a18350.irecognizer.RecognizeActivity"
-            android:theme="@android:style/Theme.NoDisplay"/>
+            android:theme="@android:style/Theme.NoDisplay">
+        </activity>>
         <activity android:name="com.elliott.a18350.irecognizer.InfoActivity"
             android:theme="@style/TranslucentTheme"/>
         <activity android:name="com.elliott.a18350.irecognizer.LaunchActivity"
             android:theme="@style/TransSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             </activity>>

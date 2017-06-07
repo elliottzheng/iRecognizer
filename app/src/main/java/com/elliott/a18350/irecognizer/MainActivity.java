@@ -59,6 +59,7 @@ public class MainActivity extends BaseColorActivity {
     private long exitTime;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
+    private static final int REQUEST_RECOGNIZE = 3;
     private Uri imageUri;
     private EditText tvMsg;
 
@@ -67,10 +68,10 @@ public class MainActivity extends BaseColorActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: before");
         Intent formal_intent=getIntent();
-        if(formal_intent.getData()!=null)
+        if(formal_intent.getStringExtra("num")==null&&formal_intent.getData()!=null)
         {
-            Log.i(TAG, "onCreate: getin");
-            place(formal_intent.getStringExtra("num"),formal_intent.getData());
+            Log.d(TAG, "onCreate: you have get in");
+            before_crop(formal_intent);
         }
         else
             exitTime=System.currentTimeMillis();
@@ -251,37 +252,57 @@ public class MainActivity extends BaseColorActivity {
                 //调用相机了，要调用图片裁剪的方法
                 break;
             case REQUEST_PICK :
-                try {
-                    if(data != null){
-                        Uri uri = data.getData();
-                        if(!TextUtils.isEmpty(uri.getAuthority())){
-                            Cursor cursor = this.getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
-                            if(null == cursor){
-                                return;
-                            }
-                            cursor.moveToFirst();
-                            //拿到了照片的path
-                            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                            cursor.close();
-                            path = "file://"+path;
-                            Uri uri_crop = Uri.parse(path);
-                            startUcrop(uri_crop);
-                            //启动裁剪界面，配置裁剪参数
-                        }
-                    }
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                before_crop(data);
                 break;
             case UCrop.REQUEST_CROP:
                 Uri croppedFileUri = UCrop.getOutput(data);
                 Intent recognize_intent=new Intent(this,RecognizeActivity.class);
                 recognize_intent.setData(croppedFileUri);
-                startActivity(recognize_intent);
+                startActivityForResult(recognize_intent,REQUEST_RECOGNIZE);
+                break;
+            case REQUEST_RECOGNIZE:
+                Log.i(TAG, "onCreate: getin");
+                place(data.getStringExtra("num"),data.getData());
                 break;
         }
 
     }
+
+
+    private void before_crop(Intent data)
+    {
+        try {
+            String path;
+            if(data != null){
+                Uri uri = data.getData();
+                Log.d(TAG, "before_crop1: "+uri.toString());
+                if(!TextUtils.isEmpty(uri.getAuthority())){
+                    Cursor cursor = this.getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
+                    if(null == cursor){
+                        return;
+                    }
+                    cursor.moveToFirst();
+                    Log.d(TAG, "before_crop2: "+"null cursor");
+                    //拿到了照片的path
+                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    cursor.close();
+                    path = "file://"+path;
+
+                }
+                else
+                    path=uri.toString();
+                Uri uri_crop = Uri.parse(path);
+                Log.d(TAG, "before_crop: "+uri_crop.toString());
+                startUcrop(uri_crop);
+                //启动裁剪界面，配置裁剪参数
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.d(TAG, "before_crop: "+"exception");
+        }
+    }
+
+
 
     private void startUcrop(Uri uri_crop) {
         //裁剪后保存到文件中

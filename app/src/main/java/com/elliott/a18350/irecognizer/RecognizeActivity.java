@@ -37,7 +37,6 @@ public class RecognizeActivity extends Activity {
         RecognizeActivityPermissionsDispatcher.initTessBaseDataWithCheck(RecognizeActivity.this);
         Uri image_uri=getIntent().getData();
         recognize(image_uri);
-
         Log.d(TAG, "onCreate: nothirng happen");
         finish();
     }
@@ -105,7 +104,7 @@ public class RecognizeActivity extends Activity {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setData(image_uri);
             intent.putExtra("num",getNumber(bitmap));
-            startActivity(intent);
+            setResult(RESULT_OK,intent);
         }
         catch (FileNotFoundException e) {
             Log.e("Exception", e.getMessage(),e);
