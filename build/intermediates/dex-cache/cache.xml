@@ -23,6 +23,16 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\18350\.gradle\caches\modules-2\files-2.1\org.jsoup\jsoup\1.10.1\645f1ad2f6f4cbad1cde4c483eae71e4051be6ef\jsoup-1.10.1.jar"
+        jumboMode="false"
+        min-sdk-version="14"
+        optimize="true"
+        revision="25.0.0"
+        sha1="645f1ad2f6f4cbad1cde4c483eae71e4051be6ef">
+        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\28.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.1.aar\7fcb904c76a4d136c12c72afe3edcf52\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="14"
@@ -320,6 +330,16 @@
         revision="25.0.0"
         sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
         <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\UpdateCheckerLib-v1.2.aar\d4ae019f3ea4ef40a49a5de9a8eb1ad4\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="14"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a677f638aff28a1da3a7def6c71facb949c49fc1">
+        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\29.jar" />
     </item>
     <item
         is-multidex="false"

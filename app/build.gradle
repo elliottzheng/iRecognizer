@@ -9,8 +9,8 @@ android {
         applicationId "com.elliott.a18350.irecognizer"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.6"
+        versionCode 5
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables{
             useSupportLibrary  true
@@ -47,6 +47,7 @@ dependencies {
     compile 'com.rmtheis:tess-two:7.0.0'
     compile 'com.android.support:design:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.github.Trumeet:UpdateCheckerLib:v1.2'
 }
 repositories {
     mavenCentral()

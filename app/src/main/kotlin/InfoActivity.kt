@@ -2,10 +2,13 @@ package com.elliott.a18350.irecognizer
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.KeyEvent
+import kh.android.updatecheckerlib.UpdateChecker
 import kotlinx.android.synthetic.main.about.*
 
 
@@ -21,6 +24,8 @@ class InfoActivity : Activity() {
         setContentView(R.layout.about)
         hyperlink.autoLinkMask = Linkify.ALL
         hyperlink.movementMethod = LinkMovementMethod.getInstance()
+        check(UpdateChecker.Market.MARKET_COOLAPK,packageName,getVersionName())
+
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -33,4 +38,32 @@ class InfoActivity : Activity() {
         return super.onKeyDown(keyCode, event)
     }
 
+    private fun check(market: UpdateChecker.Market, pkg: String,now_versionName:String) {
+        Thread(Runnable {
+            try {
+                val info = UpdateChecker.check(market, pkg)
+                if(info.versionName>now_versionName) {
+                    runOnUiThread {
+                        val builder = AlertDialog.Builder(this@InfoActivity)
+                        builder.setTitle("发现新版本,请在酷安检查更新")
+                                .setMessage(info.versionName + "\n" + info.changeLog)
+                                .show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }).start()
+    }
+
+    fun getVersionName(): String {
+        val manager = packageManager
+        try {
+            val packageInfo = manager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+            return packageInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return ""
+    }
 }
