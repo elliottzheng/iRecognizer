@@ -1,5 +1,5 @@
-#iRecognizer
-#基于Tesseract的移动端号码检测识别应用
+#iRecognizer 基于Tesseract的移动端号码检测识别应用
+
 创意：我们不是有时候要看着别人的手机（电话）号码然后一个数字一个数字的输入吗？
 这个很麻烦而且容易出错，为什么不能就是扫一串数字，然后就获得电话号码呢？
 
@@ -8,6 +8,7 @@
 
 本项目采用 GPL v2 授权协议，欢迎大家提出改进意见
 使用到的第三方开源库
+
 1.Tess-two 
 ## License
 
@@ -61,7 +62,7 @@ limitations under the License.
     limitations under the License.
 
 4.Updatecheckerlib from trumeet
-# Licence 
+## Licence 
 --------
 ```
 Copyright (C) 2017 Trumeet
@@ -77,5 +78,5 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
+```
 十分感谢
