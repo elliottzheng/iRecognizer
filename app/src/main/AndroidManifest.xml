@@ -13,9 +13,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/png"></data>
-                <data android:mimeType="image/jpg"></data>
-                <data android:mimeType="image/bmp"></data>
+                <data android:mimeType="image/*"></data>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"></data>
             </intent-filter>
         </activity>>
         <activity android:name="com.elliott.a18350.irecognizer.RecognizeActivity"

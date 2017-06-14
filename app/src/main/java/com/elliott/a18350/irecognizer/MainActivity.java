@@ -60,21 +60,35 @@ public class MainActivity extends BaseColorActivity {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
     private static final int REQUEST_RECOGNIZE = 3;
+
     private Uri imageUri;
     private EditText tvMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: before");
         Intent formal_intent=getIntent();
+        String action=formal_intent.getAction();
+        String type=formal_intent.getType();
         if(formal_intent.getStringExtra("num")==null&&formal_intent.getData()!=null)
         {
-            Log.d(TAG, "onCreate: you have get in");
+            Log.d(TAG, "onCreate: on opening image");
             before_crop(formal_intent);
         }
-        else
+        else if(action!=null)
+        {
+            Log.d(TAG, "onCreate: on sending image");
+            Log.d(TAG, "onCreate: "+type);
+            if(action.equals(Intent.ACTION_SEND))
+            {
+                Uri uri=formal_intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                formal_intent.setData(uri);
+                before_crop(formal_intent);
+            }
+        }
+        else{
             exitTime=System.currentTimeMillis();
+        }
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
 
@@ -260,7 +274,7 @@ public class MainActivity extends BaseColorActivity {
                 recognize_intent.setData(croppedFileUri);
                 startActivityForResult(recognize_intent,REQUEST_RECOGNIZE);
                 break;
-            case REQUEST_RECOGNIZE:
+            case REQUEST_RECOGNIZE://识别完后将结果输出到textview和imageview
                 Log.i(TAG, "onCreate: getin");
                 place(data.getStringExtra("num"),data.getData());
                 break;
@@ -282,7 +296,6 @@ public class MainActivity extends BaseColorActivity {
                         return;
                     }
                     cursor.moveToFirst();
-                    Log.d(TAG, "before_crop2: "+"null cursor");
                     //拿到了照片的path
                     path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     cursor.close();

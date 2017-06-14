@@ -293,6 +293,16 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\tess-two-7.0.0.aar\774037b4a2a69e7fc3de8e80240c73e9\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="14"
+        optimize="true"
+        revision="25.0.0"
+        sha1="90b930477807fbf853e8ffd3eada100de58eb98f">
+        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\27.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.1.aar\b6d6ca1d9c7eb207c7a4914326dcd7bf\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="18"
@@ -410,16 +420,6 @@
         revision="25.0.0"
         sha1="2c60ae5fbd4660b2b02e52ff411e88166545fe5b">
         <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\18350\.gradle\caches\transforms-1\files-1.1\tess-two-6.3.0.aar\5b2d6b1411c7fbc6fb827d6d86f025ed\jars\classes.jar"
-        jumboMode="false"
-        min-sdk-version="14"
-        optimize="true"
-        revision="25.0.0"
-        sha1="2e1e80e5618ce24efaf884fec3cf6133ba2d6555">
-        <dex dex="M:\iRecognizer\myrecoginzer\app\build\intermediates\transforms\preDex\release\26.jar" />
     </item>
     <item
         is-multidex="false"
