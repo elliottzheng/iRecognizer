@@ -21,6 +21,10 @@
                 <data android:mimeType="image/*"></data>
             </intent-filter>
         </activity>>
+
+        <activity android:name="com.elliott.a18350.irecognizer.ResultActivity"
+            android:theme="@style/TranslucentTheme"/>
+
         <activity android:name="com.elliott.a18350.irecognizer.RecognizeActivity"
             android:theme="@android:style/Theme.NoDisplay">
         </activity>>

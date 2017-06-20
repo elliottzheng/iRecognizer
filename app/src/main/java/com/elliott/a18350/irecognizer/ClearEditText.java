@@ -4,22 +4,26 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
+import java.lang.reflect.Method;
 
-
- /**
-  * 描述:实现带清除效果的EditText
-  * Created by vctor2015 on 2017/3/9.
-  * 代码来自csdn博友 Android界的小蚂蚁的博客
-  * http://blog.csdn.net/qq_29502523/article/details/60965020
-  * 十分感谢
-  *
-  * modified by 18350 on 2017/5/24 0024.
-  *
- */
+/**
+*描述:实现带清除效果的EditText
+*Created by vctor2015 on 2017/3/9.
+*代码来自csdn博友 Android界的小蚂蚁的博客
+*http://blog.csdn.net/qq_29502523/article/details/60965020
+*十分感谢
+*
+*modified by 18350on 2017/5/24 0024.
+*我屏蔽了输入法的的键盘，但仍显示光标，函数disableShowSoftInput
+*代码来自博友LVXIANGAN
+*http://blog.csdn.net/lvxiangan/article/details/51542244
+*/
 
 public class ClearEditText extends android.support.v7.widget.AppCompatEditText implements View.OnFocusChangeListener,
         TextWatcher {
@@ -55,6 +59,8 @@ public class ClearEditText extends android.support.v7.widget.AppCompatEditText i
         setOnFocusChangeListener(this);
         // 设置输入框里面内容发生改变的监听
         addTextChangedListener(this);
+        disableShowSoftInput();//请注意这是一个改动，我屏蔽了输入法,使它仍然能够显示光标 --Elliott
+
     }
 
     /* @说明：isInnerWidth, isInnerHeight为ture，触摸点在删除图标之内，则视为点击了删除图标
@@ -128,5 +134,26 @@ public class ClearEditText extends android.support.v7.widget.AppCompatEditText i
 
     }
 
+    private void disableShowSoftInput() {
+        if (android.os.Build.VERSION.SDK_INT <= 10) {
+            setInputType(InputType.TYPE_NULL);
+        } else {
+            Class<EditText> cls = EditText.class;
+            Method method;
+            try {
+                method = cls.getMethod("setShowSoftInputOnFocus", boolean.class);
+                method.setAccessible(true);
+                method.invoke(this, false);
+            } catch (Exception e) {
+            }
+
+            try {
+                method = cls.getMethod("setSoftInputShownOnFocus", boolean.class);
+                method.setAccessible(true);
+                method.invoke(this, false);
+            } catch (Exception e) {
+            }
+        }
+    }
 
 }

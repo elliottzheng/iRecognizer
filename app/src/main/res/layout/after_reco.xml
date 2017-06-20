@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.elliott.a18350.irecognizer.MainActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="130dp"
+        android:background="@drawable/bg_boder"/>
+
+    <com.elliott.a18350.irecognizer.ClearEditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:background="@drawable/edit_bg"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="386dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            app:srcCompat="@drawable/phone" />
+
+        <ImageButton
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            app:srcCompat="@drawable/message_text_outline" />
+
+        <ImageButton
+            android:id="@+id/copy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            app:srcCompat="@drawable/content_copy" />
+
+        <ImageButton
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            app:srcCompat="@drawable/information" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"></FrameLayout>
+    </LinearLayout>>
+</LinearLayout>

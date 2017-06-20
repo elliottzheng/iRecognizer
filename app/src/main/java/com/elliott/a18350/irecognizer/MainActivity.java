@@ -1,8 +1,7 @@
 package com.elliott.a18350.irecognizer;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,12 +13,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.text.ClipboardManager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,12 +26,9 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
-
-import static android.widget.Toast.makeText;
 /**
  * Using Ucrop in my project --Elliott 20175.28
  * Copyright 2017, Yalantis
@@ -62,126 +57,56 @@ public class MainActivity extends BaseColorActivity {
     private static final int REQUEST_RECOGNIZE = 3;
 
     private Uri imageUri;
-    private EditText tvMsg;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent formal_intent=getIntent();
-        String action=formal_intent.getAction();
-        String type=formal_intent.getType();
-        if(formal_intent.getStringExtra("num")==null&&formal_intent.getData()!=null)
-        {
+        Intent formal_intent = getIntent();
+        String action = formal_intent.getAction();
+        String type = formal_intent.getType();
+
+        if (formal_intent.getStringExtra("num") == null && formal_intent.getData() != null) {
             Log.d(TAG, "onCreate: on opening image");
             before_crop(formal_intent);
-        }
-        else if(action!=null)
-        {
+        } else if (action != null) {
             Log.d(TAG, "onCreate: on sending image");
-            Log.d(TAG, "onCreate: "+type);
-            if(action.equals(Intent.ACTION_SEND))
-            {
-                Uri uri=formal_intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            Log.d(TAG, "onCreate: " + type);
+            if (action.equals(Intent.ACTION_SEND)) {
+                Uri uri = formal_intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 formal_intent.setData(uri);
                 before_crop(formal_intent);
             }
-        }
-        else{
-            exitTime=System.currentTimeMillis();
+        } else {
+            Log.d(TAG, "onCreate: on normal open");
+            exitTime = System.currentTimeMillis();
         }
         com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.init_CroperWithCheck(this);
 
 
-        tvMsg = (EditText) findViewById(R.id.editText);
-        ImageButton button3 = (ImageButton) findViewById(R.id.phone);
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+tvMsg.getText()));
-                startActivity(intent);
-            }
-        });//打电话
-
-        ImageButton  button1= (ImageButton) findViewById(R.id.message);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("smsto:"+tvMsg.getText()));
-                intent.putExtra("sms_body","");
-                startActivity(intent);
-            }
-        });//发短信
-
-        ImageButton button2 = (ImageButton) findViewById(R.id.copy);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // 从API11开始android推荐使用android.content.ClipboardManager
-                // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
-                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                // 将文本内容放到系统剪贴板里。
-                cm.setText(tvMsg.getText());
-                Toast toast= makeText(getApplicationContext(), "号码已复制成功", Toast.LENGTH_LONG);
-                toast.show();
-
-            }
-        });//复制到剪贴板
-
-        ImageButton  button4= (ImageButton) findViewById(R.id.info);
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, InfoActivity.class));
-            }
-        });//帮助
-
     }
 
-    private void place(String str,Uri uri){
-        try {
-            Log.e("uri", uri.toString());
-            ContentResolver cr = this.getContentResolver();
-            Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-            if(bitmap==null)
-                Log.i(TAG, "bitmap又是空的");
-            ImageView imageview = (ImageView) findViewById(R.id.imageView);
-            if(imageview==null)
-                Log.i(TAG, "又是空的");
-                /* 将Bitmap设定到ImageView */
-            imageview.setImageBitmap(bitmap);
-            //将结果输出到textedit
-            EditText myedittext=(EditText)this.findViewById(R.id.editText);
-            myedittext.setText(str);
-        }
-        catch (FileNotFoundException e) {
-            Log.e("Exception", e.getLocalizedMessage());
-        }
-
+    private void ShowResult(String str, Uri uri) {
+        Intent show_intent = new Intent(this, ResultActivity.class);
+        show_intent.setData(uri);
+        show_intent.putExtra("num", str);
+        startActivity(show_intent);
     }
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_main;
+        return R.layout.main;
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 
-            if((System.currentTimeMillis()-exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
+            if ((System.currentTimeMillis() - exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
             {
-                Toast.makeText(getApplicationContext(), "再按一次退出程序",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
-            }
-            else
-            {
+            } else {
                 finish();
                 System.exit(0);
             }
@@ -200,8 +125,7 @@ public class MainActivity extends BaseColorActivity {
 
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void Album_click()
-    {
+    public void Album_click() {
         Intent choosePicIntent = new Intent(Intent.ACTION_PICK, null);
         choosePicIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(choosePicIntent, REQUEST_PICK);
@@ -213,12 +137,12 @@ public class MainActivity extends BaseColorActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            imageUri= FileProvider.getUriForFile(this,"com.elliott.a18350.irecognizer.fileprovider", new File(getCacheDir(),"image.jpg"));
+            imageUri = FileProvider.getUriForFile(this, "com.elliott.a18350.irecognizer.fileprovider", new File(getCacheDir(), "image.jpg"));
         } else {
-            imageUri = Uri.fromFile(new File(getCacheDir(),"image.jpg"));
+            imageUri = Uri.fromFile(new File(getCacheDir(), "image.jpg"));
         }
         Log.d("sdad", "Camera_click: should be some thing");
-        Log.d("uri", "Camera_click: "+imageUri.toString());
+        Log.d("uri", "Camera_click: " + imageUri.toString());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
@@ -226,23 +150,42 @@ public class MainActivity extends BaseColorActivity {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void init_Croper() {
-        ImageButton  button1= (ImageButton) findViewById(R.id.album);
-        button1.setOnClickListener(new View.OnClickListener() {
+        ImageButton button = (ImageButton) findViewById(R.id.Picker);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+                Camera_or_Album();
             }
         });//相册选取
 
+    }
 
-        ImageButton button2= (ImageButton) findViewById(R.id.camera);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    protected void Camera_or_Album() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("选择");
+        builder.setMessage("请选择图片导入方式");
+
+        builder.setPositiveButton("相机拍摄", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
                 com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.Camera_clickWithCheck(MainActivity.this);
             }
-        });//拍照获得
+        });
+
+        builder.setNegativeButton("相册导入", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                com.elliott.a18350.irecognizer.MainActivityPermissionsDispatcher.Album_clickWithCheck(MainActivity.this);
+            }
+        });
+
+        builder.show();
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -274,9 +217,8 @@ public class MainActivity extends BaseColorActivity {
                 recognize_intent.setData(croppedFileUri);
                 startActivityForResult(recognize_intent,REQUEST_RECOGNIZE);
                 break;
-            case REQUEST_RECOGNIZE://识别完后将结果输出到textview和imageview
-                Log.i(TAG, "onCreate: getin");
-                place(data.getStringExtra("num"),data.getData());
+            case REQUEST_RECOGNIZE://识别完后将结果输出到ResultActivity
+                ShowResult(data.getStringExtra("num"),data.getData());
                 break;
         }
 
