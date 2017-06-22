@@ -1,0 +1,6 @@
+COMMAND=PREDEX_LIBRARY_TO_DEX_ARCHIVE
+FILE_PATH=M:\iRecognizer\myrecoginzer\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar
+FILE_HASH=0448ae7c04409f7dcf25e1b54fd94c3b0053a5be
+DX_VERSION=1.13
+JUMBO_MODE=true
+OPTIMIZE=true

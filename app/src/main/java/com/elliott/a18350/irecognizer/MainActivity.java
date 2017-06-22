@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yalantis.ucrop.UCrop;
@@ -54,7 +51,6 @@ public class MainActivity extends BaseColorActivity {
     private long exitTime;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK = 2;
-    private static final int REQUEST_RECOGNIZE = 3;
 
     private Uri imageUri;
 
@@ -86,12 +82,7 @@ public class MainActivity extends BaseColorActivity {
 
     }
 
-    private void ShowResult(String str, Uri uri) {
-        Intent show_intent = new Intent(this, ResultActivity.class);
-        show_intent.setData(uri);
-        show_intent.putExtra("num", str);
-        startActivity(show_intent);
-    }
+
 
     @Override
     protected int getLayoutResId() {
@@ -201,8 +192,7 @@ public class MainActivity extends BaseColorActivity {
         switch (requestCode){
             case REQUEST_CAMERA:
                 try{
-                    Uri camera_uri=startCropImage();
-                    startUcrop(camera_uri);
+                    startUcrop(imageUri);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -215,10 +205,7 @@ public class MainActivity extends BaseColorActivity {
                 Uri croppedFileUri = UCrop.getOutput(data);
                 Intent recognize_intent=new Intent(this,RecognizeActivity.class);
                 recognize_intent.setData(croppedFileUri);
-                startActivityForResult(recognize_intent,REQUEST_RECOGNIZE);
-                break;
-            case REQUEST_RECOGNIZE://识别完后将结果输出到ResultActivity
-                ShowResult(data.getStringExtra("num"),data.getData());
+                startActivity(recognize_intent);
                 break;
         }
 
@@ -286,18 +273,7 @@ public class MainActivity extends BaseColorActivity {
 
     }
 
-    /**e
-     * 调用相机后对图片进行裁剪的方法
-     * @param
-     */
 
-    private Uri startCropImage() {
-        //显示图片
-        Bitmap bmp = BitmapFactory.decodeFile(imageUri.toString());// 解析返回的图片成bitmap
-        ImageView imageView=(ImageView)findViewById(R.id.imageView);
-        imageView.setImageBitmap(bmp);
-        return imageUri;
-    }
 }
 
 

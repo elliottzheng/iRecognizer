@@ -1,13 +1,11 @@
 package com.elliott.a18350.irecognizer
 
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
-import android.view.KeyEvent
 import kh.android.updatecheckerlib.UpdateChecker
 import kotlinx.android.synthetic.main.about.*
 
@@ -28,15 +26,6 @@ class InfoActivity : Activity() {
 
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            startActivity(Intent(this@InfoActivity, MainActivity::class.java))
-            finish()
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
 
     private fun check(market: UpdateChecker.Market, pkg: String,now_versionName:String) {
         Thread(Runnable {

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MyKeyBoard extends Fragment implements OnClickListener{
     Activity mActivity;
@@ -104,7 +105,7 @@ public class MyKeyBoard extends Fragment implements OnClickListener{
                 performKeyDown(KeyEvent.KEYCODE_9);
                 break;
             case R.id.button_point:
-                final com.elliott.a18350.irecognizer.ClearEditText  tvMsg = (com.elliott.a18350.irecognizer.ClearEditText) rootView.findViewById(R.id.editText);
+                EditText tvMsg=(EditText) getActivity().findViewById(R.id.editText);
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + tvMsg.getText()));
@@ -125,7 +126,7 @@ public class MyKeyBoard extends Fragment implements OnClickListener{
                 try {
                     Instrumentation inst = new Instrumentation();
                     inst.sendKeyDownUpSync(keyCode);
-                } catch (Exception e) {
+                } catch (Exception e){
                     e.printStackTrace();
                 }
             }

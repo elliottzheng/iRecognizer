@@ -101,10 +101,10 @@ public class RecognizeActivity extends Activity {
             Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(image_uri));
             if(bitmap==null)
                 Log.i(TAG, "bitmap又是空的");
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, ResultActivity.class);
             intent.setData(image_uri);
             intent.putExtra("num",getNumber(bitmap));
-            setResult(RESULT_OK,intent);
+            startActivity(intent);
         }
         catch (FileNotFoundException e) {
             Log.e("Exception", e.getMessage(),e);
